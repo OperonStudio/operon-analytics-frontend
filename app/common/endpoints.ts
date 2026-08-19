@@ -1,35 +1,11 @@
-export const CommonEndpoints = {
-  HEALTH: "health",
-} as const;
-
-export const AuthEndpoints = {
-  LOGIN: "login",
-  LOGOUT: "logout",
-  SIGNUP: "sign-up",
-  FORGOT_PASSWORD: "forgot-password",
-  RESET_PASSWORD: "reset-password",
-} as const;
-
 export const DashboardEndpoints = {
-  PROJECTS: "projects",
-  API_KEYS: "api-keys",
-  ENVIRONMENTS: "environments",
-  CONTEXTS: "contexts",
-  WORKSPACES: "workspaces",
-} as const;
+  WORKSPACES: "/api/workspaces",
+};
 
-const endpointGroups = {
-  CommonEndpoints,
-  AuthEndpoints,
-  DashboardEndpoints,
-} as const;
+export const getEndpoint = (endpoint: string) => endpoint;
 
-type Endpoint = {
-  [
-    K in keyof typeof endpointGroups
-  ]: (typeof endpointGroups)[K][keyof (typeof endpointGroups)[K]];
-}[keyof typeof endpointGroups];
-
-export const getEndpoint = (endpoint: Endpoint): string => {
-  return `/api/${endpoint}`;
+export const ENDPOINTS = {
+  USAGE: (workspaceId: string) => `/api/workspaces/${workspaceId}/usage`,
+  WORKSPACES: "/api/workspaces",
+  AUTH_REFRESH: "/api/auth/refresh",
 };

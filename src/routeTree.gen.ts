@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as FunnelsIndexRouteImport } from './routes/funnels/index'
+import { Route as TelemetryIndexRouteImport } from './routes/telemetry/index'
+import { Route as TrackersIndexRouteImport } from './routes/trackers/index'
 import { Route as VisualEditorIndexRouteImport } from './routes/visual-editor/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +26,21 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
   path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FunnelsIndexRoute = FunnelsIndexRouteImport.update({
+  id: '/funnels/',
+  path: '/funnels/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TelemetryIndexRoute = TelemetryIndexRouteImport.update({
+  id: '/telemetry/',
+  path: '/telemetry/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrackersIndexRoute = TrackersIndexRouteImport.update({
+  id: '/trackers/',
+  path: '/trackers/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VisualEditorIndexRoute = VisualEditorIndexRouteImport.update({
   id: '/visual-editor/',
   path: '/visual-editor/',
@@ -32,30 +50,61 @@ const VisualEditorIndexRoute = VisualEditorIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/funnels/': typeof FunnelsIndexRoute
+  '/telemetry/': typeof TelemetryIndexRoute
+  '/trackers/': typeof TrackersIndexRoute
   '/visual-editor/': typeof VisualEditorIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardIndexRoute
+  '/funnels': typeof FunnelsIndexRoute
+  '/telemetry': typeof TelemetryIndexRoute
+  '/trackers': typeof TrackersIndexRoute
   '/visual-editor': typeof VisualEditorIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard/': typeof DashboardIndexRoute
+  '/funnels/': typeof FunnelsIndexRoute
+  '/telemetry/': typeof TelemetryIndexRoute
+  '/trackers/': typeof TrackersIndexRoute
   '/visual-editor/': typeof VisualEditorIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard/' | '/visual-editor/'
+  fullPaths:
+    | '/'
+    | '/dashboard/'
+    | '/funnels/'
+    | '/telemetry/'
+    | '/trackers/'
+    | '/visual-editor/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/visual-editor'
-  id: '__root__' | '/' | '/dashboard/' | '/visual-editor/'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/funnels'
+    | '/telemetry'
+    | '/trackers'
+    | '/visual-editor'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard/'
+    | '/funnels/'
+    | '/telemetry/'
+    | '/trackers/'
+    | '/visual-editor/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
+  FunnelsIndexRoute: typeof FunnelsIndexRoute
+  TelemetryIndexRoute: typeof TelemetryIndexRoute
+  TrackersIndexRoute: typeof TrackersIndexRoute
   VisualEditorIndexRoute: typeof VisualEditorIndexRoute
 }
 
@@ -75,6 +124,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/funnels/': {
+      id: '/funnels/'
+      path: '/funnels'
+      fullPath: '/funnels/'
+      preLoaderRoute: typeof FunnelsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/telemetry/': {
+      id: '/telemetry/'
+      path: '/telemetry'
+      fullPath: '/telemetry/'
+      preLoaderRoute: typeof TelemetryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/trackers/': {
+      id: '/trackers/'
+      path: '/trackers'
+      fullPath: '/trackers/'
+      preLoaderRoute: typeof TrackersIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/visual-editor/': {
       id: '/visual-editor/'
       path: '/visual-editor'
@@ -88,6 +158,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+  FunnelsIndexRoute: FunnelsIndexRoute,
+  TelemetryIndexRoute: TelemetryIndexRoute,
+  TrackersIndexRoute: TrackersIndexRoute,
   VisualEditorIndexRoute: VisualEditorIndexRoute,
 }
 export const routeTree = rootRouteImport

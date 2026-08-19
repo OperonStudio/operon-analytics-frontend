@@ -6,7 +6,7 @@ import { Toaster } from "@operon/ui";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { Dashboard } from "../dashboard/index";
+import { DashboardLayout } from "../dashboard/dashboard-layout";
 
 const AUTH_API_URL = import.meta.env.VITE_OPERON_AUTH_API_URL ?? "http://localhost:8081";
 const HOMEPAGE_URL = import.meta.env.VITE_HOMEPAGE_URL ?? "http://localhost:4001";
@@ -33,7 +33,7 @@ export const RootDocument = ({ children }: { children: React.ReactNode }) => {
             <AuthGate homepageUrl={HOMEPAGE_URL}>
               <TopProgressBar />
               <Toaster />
-              {isFullScreen ? children : <Dashboard>{children}</Dashboard>}
+              {isFullScreen ? children : <DashboardLayout>{children}</DashboardLayout>}
             </AuthGate>
           </AppThemeProvider>
         </AuthProvider>

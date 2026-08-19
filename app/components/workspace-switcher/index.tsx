@@ -3,7 +3,7 @@ import {
   createWorkspaceOptions,
   getWorkspacesOptions,
 } from "#/common/workspace-api";
-import { Check, ChevronDown, LayoutDashboard, Plus } from "@operon/icons";
+import { Check, ChevronDown, Plus } from "@operon/icons";
 import { Box, Button, toast } from "@operon/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
@@ -30,9 +30,9 @@ export function useActiveWorkspace() {
 
   const handleRedirect = () => {
     const pathname = router.state.location.pathname;
-    if (pathname.startsWith("/projects/")) router.navigate({ to: "/projects" });
-    else if (pathname.startsWith("/rule-engine/")) router.navigate({ to: "/rule-engine" });
-    else if (pathname.startsWith("/api-keys/")) router.navigate({ to: "/api-keys" });
+    if (pathname.startsWith("/projects/")) router.navigate({ to: "/projects" as any });
+    else if (pathname.startsWith("/rule-engine/")) router.navigate({ to: "/rule-engine" as any });
+    else if (pathname.startsWith("/api-keys/")) router.navigate({ to: "/api-keys" as any });
   };
 
   useEffect(() => {
@@ -162,20 +162,6 @@ export const WorkspaceSwitcher = ({ compact = false }: WorkspaceSwitcherProps) =
           }
         }}
       >
-        <Box
-          style={{
-            width: 28,
-            height: 28,
-            borderRadius: "6px",
-            background: "var(--operon-color-primary, #6366f1)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-          }}
-        >
-          <LayoutDashboard size={14} color="white" />
-        </Box>
         {!compact && (
           <>
             <Box style={{ flex: 1, minWidth: 0 }}>

@@ -1,6 +1,6 @@
 import { RootDocument } from "#/modules/root-document";
 import "@morph-css/kit/css";
-import { Layers, LayoutDashboard } from "@operon/icons";
+import { Command, Layers, LayoutDashboard, Terminal } from "@operon/icons";
 import operonMorphCss from "@operon/ui/dist/morphcss.css?url";
 import operonCss from "@operon/ui/dist/style.css?url";
 import { createRootRouteWithContext } from "@tanstack/react-router";
@@ -22,7 +22,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "Operon Compose",
+        title: "Operon Analytics",
       },
     ],
     links: [
@@ -62,14 +62,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   staticData: {
     sidebarGroups: [
       {
-        title: "WORKSPACE",
+        title: "ANALYTICS",
         items: [
           { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-          {
-            label: "Visual Editor",
-            icon: Layers,
-            href: "/visual-editor",
-          },
+          { label: "Visual Trackers", icon: Layers, href: "/trackers" },
+          { label: "Telemetry Logs", icon: Terminal, href: "/telemetry" },
+          { label: "User Funnels", icon: Command, href: "/funnels" },
+          { label: "Visual Editor", icon: Layers, href: "/visual-editor" },
         ],
       },
     ],
