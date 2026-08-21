@@ -1,25 +1,59 @@
 import { css } from "@morph-css/kit";
 
+export const headerWrapperStyle = css({
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+});
+
 export const topbarStyle = css({
   display: "flex",
   alignItems: "center",
   justifyContent: "space-between",
   flex: 1,
   minWidth: 0,
-  gap: "16px",
+  gap: "12px",
+});
+
+export const desktopBreadcrumbStyle = css({
+  display: "flex",
+  alignItems: "center",
+  "@media (max-width: 900px)": {
+    display: "none",
+  },
+});
+
+export const mobileBreadcrumbBarStyle = css({
+  display: "none",
+  "@media (max-width: 900px)": {
+    display: "flex",
+    alignItems: "center",
+    overflowX: "auto",
+    whiteSpace: "nowrap",
+    WebkitOverflowScrolling: "touch",
+    padding: "6px 12px",
+    borderTop: "1px solid var(--operon-color-border-subtle, #f0f0f0)",
+    backgroundColor: "var(--operon-color-surface, #ffffff)",
+    scrollbarWidth: "none",
+  },
 });
 
 export const searchContainerStyle = css({
   flex: 1,
-  maxWidth: "600px",
+  maxWidth: "450px",
   display: "flex",
   alignItems: "center",
+  "@media (max-width: 768px)": {
+    display: "none",
+  },
 });
 
 export const rightActionsStyle = css({
   display: "flex",
   alignItems: "center",
-  gap: "12px",
+  gap: "8px",
+  marginLeft: "auto",
+  flexShrink: 0,
 });
 
 export const shortcutIconStyle = css({
@@ -28,11 +62,6 @@ export const shortcutIconStyle = css({
 });
 
 export const iconButtonStyle = css({
-  padding: "8px",
+  padding: "6px",
 });
 
-export const hideOnMobileStyle = css({
-  "@media (max-width: 1024px)": {
-    display: "none",
-  },
-});

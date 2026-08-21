@@ -21,7 +21,7 @@
     "@operonstudio/auth": "^1.0.1",
     "@operonstudio/icons": "^1.0.19",
     "@operonstudio/request": "^1.0.4",
-    "@operonstudio/ui": "^1.0.21",
+    "@operonstudio/ui": "^1.0.22",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-query": "latest",
     "@tanstack/react-query-devtools": "latest",
