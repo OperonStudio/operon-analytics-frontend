@@ -1,4 +1,4 @@
-import { Box, Button, Modal } from "@operon/ui";
+import { Box, Button, Modal } from "@operonstudio/ui";
 
 export interface ConfirmModalProps {
   isOpen: boolean;

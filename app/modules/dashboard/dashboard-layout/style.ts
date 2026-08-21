@@ -1,6 +1,6 @@
 import { css } from "@morph-css/kit";
 
-// Layout is now provided by `<AppShell>` from `@operon/ui`. Only sidebar-footer
+// Layout is now provided by `<AppShell>` from `@operonstudio/ui`. Only sidebar-footer
 // slot decorations remain here.
 
 export const rootStyle = css({

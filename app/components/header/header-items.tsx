@@ -1,5 +1,5 @@
-import { Bell } from "@operon/icons";
-import { Box, Button } from "@operon/ui";
+import { Bell } from "@operonstudio/icons";
+import { Box, Button } from "@operonstudio/ui";
 import * as classes from "./style";
 
 export const HeaderItems = () => {

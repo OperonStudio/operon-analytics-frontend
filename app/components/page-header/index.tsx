@@ -1,6 +1,6 @@
 import type { PageHeaderAction, PageHeaderData } from "#/common/interfaces";
 import { useHeaderActionHandler } from "#/contexts/header-actions";
-import { Box, Button } from "@operon/ui";
+import { Box, Button } from "@operonstudio/ui";
 import { useMatches } from "@tanstack/react-router";
 import * as classes from "./style";
 

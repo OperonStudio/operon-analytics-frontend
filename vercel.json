@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/auth/:path*",
+      "destination": "https://operon-homepage-backend.onrender.com/api/auth/:path*"
+    }
+  ]
+}

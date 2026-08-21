@@ -1,15 +1,14 @@
 import { TopProgressBar } from "#/components/top-progress-bar";
-import { AppThemeProvider } from "#/contexts/theme";
 import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
-import { AuthGate, AuthProvider, extractTokenFromURL } from "@operon/auth";
-import { Toaster } from "@operon/ui";
+import { AuthGate, AuthProvider, extractTokenFromURL } from "@operonstudio/auth";
+import { ThemeProvider, Toaster } from "@operonstudio/ui";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { DashboardLayout } from "../dashboard/dashboard-layout";
 
-const AUTH_API_URL = import.meta.env.VITE_OPERON_AUTH_API_URL ?? "http://localhost:8081";
-const HOMEPAGE_URL = import.meta.env.VITE_HOMEPAGE_URL ?? "http://localhost:4001";
+const HOMEPAGE_URL =
+  import.meta.env.VITE_HOMEPAGE_URL ?? "https://operonstudio.tech";
 
 // Extract token synchronously before TanStack Router mounts and strips it
 if (typeof window !== "undefined") {
@@ -26,30 +25,40 @@ export const RootDocument = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <head>
         <HeadContent />
+        <style>{`
+          @media (max-width: 900px) {
+            aside {
+              display: none !important;
+            }
+          }
+        `}</style>
       </head>
       <body>
-        <AuthProvider refreshUrl={`${AUTH_API_URL}/api/auth/refresh`}>
-          <AppThemeProvider>
+        <ThemeProvider defaultDark={false}>
+          <AuthProvider
+            refreshUrl="/api/auth/refresh"
+            enableUrlTokenBridge={true}
+          >
             <AuthGate homepageUrl={HOMEPAGE_URL}>
               <TopProgressBar />
               <Toaster />
               {isFullScreen ? children : <DashboardLayout>{children}</DashboardLayout>}
             </AuthGate>
-          </AppThemeProvider>
-        </AuthProvider>
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-            TanStackQueryDevtools,
-          ]}
-        />
-        <Scripts />
+          </AuthProvider>
+          <TanStackDevtools
+            config={{
+              position: "bottom-right",
+            }}
+            plugins={[
+              {
+                name: "Tanstack Router",
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+              TanStackQueryDevtools,
+            ]}
+          />
+          <Scripts />
+        </ThemeProvider>
       </body>
     </html>
   );

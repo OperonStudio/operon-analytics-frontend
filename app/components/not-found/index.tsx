@@ -1,5 +1,5 @@
-import { FileQuestion } from "@operon/icons";
-import { Box, Button, Card } from "@operon/ui";
+import { FileQuestion } from "@operonstudio/icons";
+import { Box, Button, Card } from "@operonstudio/ui";
 import { Link } from "@tanstack/react-router";
 import * as classes from "./style";
 

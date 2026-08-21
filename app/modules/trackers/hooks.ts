@@ -1,4 +1,4 @@
-import { toast } from "@operon/ui";
+import { toast } from "@operonstudio/ui";
 import { useEffect, useState } from "react";
 
 const DEFAULT_TRACKERS = [

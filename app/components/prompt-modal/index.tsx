@@ -1,4 +1,4 @@
-import { Box, Button, Input, Modal } from "@operon/ui";
+import { Box, Button, Input, Modal } from "@operonstudio/ui";
 import { useEffect, useState } from "react";
 
 export interface PromptModalProps {

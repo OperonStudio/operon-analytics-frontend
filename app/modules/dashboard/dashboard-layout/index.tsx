@@ -1,25 +1,28 @@
 import { APP_NAME, ORG_NAME } from "#/common/constants";
 import { Header } from "#/components/header";
 import { WorkspaceSwitcher } from "#/components/workspace-switcher";
-import { useAppTheme } from "#/contexts/theme";
 import { cx } from "@morph-css/kit";
-import { getToken, useAuth } from "@operon/auth";
-import { BarChart3, Code, Database, Moon, Sun } from "@operon/icons";
+import { getToken, useAuth } from "@operonstudio/auth";
+import { BarChart3, Code, Database, Moon, Sun } from "@operonstudio/icons";
 import {
   AppShell,
   type AppShellNavGroup,
   type AppShellNavItem,
   type AppShellProduct,
   Toggle,
-} from "@operon/ui";
+  useTheme,
+} from "@operonstudio/ui";
 import { Link, useLocation, useMatches } from "@tanstack/react-router";
 import * as classes from "./style";
 
-const HOMEPAGE_URL = import.meta.env.VITE_HOMEPAGE_URL ?? "http://localhost:4001";
-const COMPOSE_URL = import.meta.env.VITE_COMPOSE_URL ?? "http://localhost:4000";
-const CODEBLOCKS_URL = import.meta.env.VITE_CODEBLOCKS_URL ?? "http://localhost:4002";
-const ANALYTICS_URL = import.meta.env.VITE_ANALYTICS_URL ?? "http://localhost:4003";
-const AUTH_API_URL = import.meta.env.VITE_OPERON_AUTH_API_URL ?? "http://localhost:8081";
+const HOMEPAGE_URL =
+  import.meta.env.VITE_HOMEPAGE_URL ?? "https://operonstudio.tech";
+const COMPOSE_URL =
+  import.meta.env.VITE_COMPOSE_URL ?? "https://compose.operonstudio.tech";
+const CODEBLOCKS_URL =
+  import.meta.env.VITE_CODEBLOCKS_URL ?? "https://codeblocks.operonstudio.tech";
+const ANALYTICS_URL =
+  import.meta.env.VITE_ANALYTICS_URL ?? "https://analytics.operonstudio.tech";
 
 const PRODUCTS: AppShellProduct[] = [
   {
@@ -58,7 +61,7 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
   const matches = useMatches();
   const matchWithSidebar = matches.find((m) => m.staticData?.sidebarGroups);
   const { sidebarGroups = [] } = matchWithSidebar?.staticData || {};
-  const { isDark, toggleTheme } = useAppTheme();
+  const { isDark, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
 
   const navGroups: AppShellNavGroup[] = sidebarGroups.map((group: any, i: number) => ({
@@ -142,11 +145,10 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           ? { name: user.name || user.email || "Signed in", email: user.email }
           : undefined
       }
-      onSignOut={() =>
-        logout(`${AUTH_API_URL}/api/auth/logout`).then(() => {
-          window.location.href = HOMEPAGE_URL;
-        })
-      }
+      onSignOut={async () => {
+        await logout("/api/auth/logout");
+        window.location.href = HOMEPAGE_URL;
+      }}
       onSwitchProduct={(product) => {
         window.location.href = bridgeToken(product.url);
         return true;

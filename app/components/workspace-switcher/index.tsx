@@ -3,8 +3,8 @@ import {
   createWorkspaceOptions,
   getWorkspacesOptions,
 } from "#/common/workspace-api";
-import { Check, ChevronDown, Plus } from "@operon/icons";
-import { Box, Button, toast } from "@operon/ui";
+import { Check, ChevronDown, Plus } from "@operonstudio/icons";
+import { Box, Button, toast } from "@operonstudio/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";

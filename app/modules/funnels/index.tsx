@@ -1,4 +1,4 @@
-import { Box } from "@operon/ui";
+import { Box } from "@operonstudio/ui";
 import { useFunnels } from "./hooks";
 import * as classes from "./styles";
 

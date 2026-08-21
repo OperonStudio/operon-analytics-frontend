@@ -1,4 +1,4 @@
-import { Box, Button } from "@operon/ui";
+import { Box, Button } from "@operonstudio/ui";
 import { useTelemetry } from "./hooks";
 import * as classes from "./styles";
 

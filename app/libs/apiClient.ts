@@ -1,5 +1,5 @@
-import { createClient } from "@operon/request";
-import { withLogger } from "@operon/request/middleware";
+import { createClient } from "@operonstudio/request";
+import { withLogger } from "@operonstudio/request/middleware";
 
 export const operonApiClient = createClient({
   baseURL: import.meta.env.VITE_OPERON_COMPOSE_BACKEND_URL,

@@ -1,4 +1,4 @@
-import { WebsiteEditor } from "@operon/ui";
+import { WebsiteEditor } from "@operonstudio/ui";
 import { useVisualEditor } from "./hooks";
 import * as classes from "./styles";
 

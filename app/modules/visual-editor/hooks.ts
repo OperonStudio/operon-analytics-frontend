@@ -1,4 +1,4 @@
-import { toast } from "@operon/ui";
+import { toast } from "@operonstudio/ui";
 
 export function useVisualEditor() {
   const handleSaveConfig = (config: any) => {

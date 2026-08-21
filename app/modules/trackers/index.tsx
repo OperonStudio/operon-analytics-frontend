@@ -1,5 +1,5 @@
-import { Plus } from "@operon/icons";
-import { Box, Button } from "@operon/ui";
+import { Plus } from "@operonstudio/icons";
+import { Box, Button } from "@operonstudio/ui";
 import { useTrackers } from "./hooks";
 import * as classes from "./styles";
 

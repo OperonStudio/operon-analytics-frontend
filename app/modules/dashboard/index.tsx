@@ -1,5 +1,5 @@
-import { Command, Plug, User, Zap } from "@operon/icons";
-import { Box } from "@operon/ui";
+import { Command, Plug, User, Zap } from "@operonstudio/icons";
+import { Box } from "@operonstudio/ui";
 import { useDashboard } from "./hooks";
 import * as classes from "./styles";
 

@@ -1,4 +1,4 @@
-import type { IconProps } from "@operon/icons";
+import type { IconProps } from "@operonstudio/icons";
 
 export interface SidebarItem {
   label: string;

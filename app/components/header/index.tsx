@@ -1,5 +1,5 @@
-import { Search } from "@operon/icons";
-import { Box, Breadcrumb, Input } from "@operon/ui";
+import { Search } from "@operonstudio/icons";
+import { Box, Breadcrumb, Input } from "@operonstudio/ui";
 import { useLocation, useMatches, useNavigate } from "@tanstack/react-router";
 import { HeaderItems } from "./header-items";
 import * as classes from "./style";

@@ -1,5 +1,5 @@
-import { AlertTriangle } from "@operon/icons";
-import { Box, Button, Card } from "@operon/ui";
+import { AlertTriangle } from "@operonstudio/icons";
+import { Box, Button, Card } from "@operonstudio/ui";
 import * as classes from "./style";
 
 export const ErrorBoundary = () => {
