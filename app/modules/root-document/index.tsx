@@ -28,6 +28,8 @@ export const RootDocument = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <HeadContent />
         <style>{`
           @media (max-width: 900px) {
@@ -40,7 +42,7 @@ export const RootDocument = ({ children }: { children: React.ReactNode }) => {
       <body>
         <ThemeProvider defaultDark={false}>
           <AuthProvider
-            refreshUrl="/api/auth/refresh"
+            refreshUrl={`${HOMEPAGE_URL}/api/auth/refresh`}
             enableUrlTokenBridge={true}
           >
             <AuthGate homepageUrl={HOMEPAGE_URL}>
