@@ -42,7 +42,7 @@ export const RootDocument = ({ children }: { children: React.ReactNode }) => {
       <body>
         <ThemeProvider defaultDark={false}>
           <AuthProvider
-            refreshUrl={`${HOMEPAGE_URL}/api/auth/refresh`}
+            refreshUrl="/api/auth/refresh"
             enableUrlTokenBridge={true}
           >
             <AuthGate homepageUrl={HOMEPAGE_URL}>
