@@ -15,14 +15,26 @@ import {
 import { Link, useLocation, useMatches } from "@tanstack/react-router";
 import * as classes from "./style";
 
+const isProdDomain =
+  typeof window !== "undefined" &&
+  window.location.hostname.endsWith("operonstudio.tech");
+
 const HOMEPAGE_URL =
-  import.meta.env.VITE_HOMEPAGE_URL ?? "https://operonstudio.tech";
+  isProdDomain || import.meta.env.PROD
+    ? "https://operonstudio.tech"
+    : (import.meta.env.VITE_HOMEPAGE_URL ?? "http://localhost:4001");
 const COMPOSE_URL =
-  import.meta.env.VITE_COMPOSE_URL ?? "https://compose.operonstudio.tech";
+  isProdDomain || import.meta.env.PROD
+    ? "https://compose.operonstudio.tech"
+    : (import.meta.env.VITE_COMPOSE_URL ?? "http://localhost:4000");
 const CODEBLOCKS_URL =
-  import.meta.env.VITE_CODEBLOCKS_URL ?? "https://codeblocks.operonstudio.tech";
+  isProdDomain || import.meta.env.PROD
+    ? "https://codeblocks.operonstudio.tech"
+    : (import.meta.env.VITE_CODEBLOCKS_URL ?? "http://localhost:4002");
 const ANALYTICS_URL =
-  import.meta.env.VITE_ANALYTICS_URL ?? "https://analytics.operonstudio.tech";
+  isProdDomain || import.meta.env.PROD
+    ? "https://analytics.operonstudio.tech"
+    : (import.meta.env.VITE_ANALYTICS_URL ?? "http://localhost:4003");
 
 const PRODUCTS: AppShellProduct[] = [
   {

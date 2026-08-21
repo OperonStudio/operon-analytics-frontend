@@ -8,7 +8,11 @@ import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { DashboardLayout } from "../dashboard/dashboard-layout";
 
 const HOMEPAGE_URL =
-  import.meta.env.VITE_HOMEPAGE_URL ?? "https://operonstudio.tech";
+  (typeof window !== "undefined" &&
+    window.location.hostname.endsWith("operonstudio.tech")) ||
+  import.meta.env.PROD
+    ? "https://operonstudio.tech"
+    : (import.meta.env.VITE_HOMEPAGE_URL ?? "http://localhost:4001");
 
 // Extract token synchronously before TanStack Router mounts and strips it
 if (typeof window !== "undefined") {
