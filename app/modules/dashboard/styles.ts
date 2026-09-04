@@ -81,14 +81,7 @@ export const titleStyle = css({
 export const metricsStyle = css({
   display: "grid",
   gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-  // A 1px gap over a border-coloured ground draws the hairlines between cells,
-  // so the dividers stay correct when the grid rewraps to two columns without
-  // needing nth-child rules per breakpoint.
-  gap: "1px",
-  backgroundColor: "var(--operon-color-border-subtle)",
-  border: "1px solid var(--operon-color-border)",
-  borderRadius: "var(--operon-radius-md)",
-  overflow: "hidden",
+  gap: "10px",
   "@media (max-width: 720px)": {
     gridTemplateColumns: "repeat(2, 1fr)",
   },
@@ -97,24 +90,23 @@ export const metricsStyle = css({
 export const metricStyle = css({
   display: "flex",
   flexDirection: "column",
-  gap: "6px",
-  padding: "16px 20px",
-  backgroundColor: "var(--operon-color-surface)",
+  gap: "8px",
+  padding: "16px 18px",
+  borderRadius: "18px",
+  backgroundColor: "var(--operon-color-surface-sunken)",
 });
 
 export const metricLabelStyle = css({
-  fontSize: "11px",
-  fontWeight: 600,
-  textTransform: "uppercase",
-  letterSpacing: "0.07em",
+  fontSize: "var(--operon-font-size-sm)",
+  fontWeight: 500,
   color: "var(--operon-color-text-muted)",
 });
 
 export const metricValueStyle = css({
-  fontSize: "24px",
-  fontWeight: 600,
+  fontSize: "var(--operon-font-size-2xl)",
+  fontWeight: 700,
   lineHeight: 1.1,
-  letterSpacing: "-0.02em",
+  letterSpacing: "-0.03em",
   color: "var(--operon-color-text-strong)",
   fontVariantNumeric: "tabular-nums",
 });
@@ -138,9 +130,8 @@ export const gridStyle = css({
 });
 
 export const panelStyle = css({
-  border: "1px solid var(--operon-color-border)",
-  borderRadius: "var(--operon-radius-md)",
-  backgroundColor: "var(--operon-color-surface)",
+  borderRadius: "var(--operon-radius-xl)",
+  backgroundColor: "var(--operon-color-surface-sunken)",
   display: "flex",
   flexDirection: "column",
   minWidth: 0,
@@ -237,7 +228,7 @@ export const columnStyle = css({
 export const barStyle = css({
   width: "100%",
   backgroundColor: "var(--operon-color-primary)",
-  borderRadius: "2px 2px 0 0",
+  borderRadius: "4px 4px 0 0",
 });
 
 /** A day that was measured and had no traffic, distinct from a missing day. */
@@ -280,8 +271,7 @@ export const guideTextStyle = css({
 
 export const snippetStyle = css({
   position: "relative",
-  border: "1px solid var(--operon-color-border)",
-  borderRadius: "var(--operon-radius-sm)",
+  borderRadius: "var(--operon-radius-xl)",
   backgroundColor: "var(--operon-color-surface-sunken)",
   padding: "12px 44px 12px 14px",
   fontFamily: "var(--operon-typography-mono)",
@@ -356,9 +346,8 @@ export const resourceChevronStyle = css({
 // ── States ──────────────────────────────────────────────────────────────────
 
 export const errorPanelStyle = css({
-  border: "1px solid var(--operon-color-border)",
-  borderRadius: "var(--operon-radius-md)",
-  backgroundColor: "var(--operon-color-surface)",
+  borderRadius: "var(--operon-radius-xl)",
+  backgroundColor: "var(--operon-color-surface-sunken)",
   padding: "32px 24px",
   display: "flex",
   flexDirection: "column",

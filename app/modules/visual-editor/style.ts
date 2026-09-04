@@ -300,8 +300,7 @@ export const overlayCardStyle = css({
   flexDirection: "column",
   gap: "10px",
   padding: "24px",
-  borderRadius: "var(--operon-radius-md)",
-  border: "1px solid var(--operon-color-border)",
+  borderRadius: "var(--operon-radius-xl)",
   backgroundColor: "var(--operon-color-surface)",
 });
 
@@ -403,7 +402,6 @@ export const completionStyle = css({
   maxHeight: "168px",
   overflowY: "auto",
   borderRadius: "var(--operon-radius-sm)",
-  border: "1px solid var(--operon-color-border)",
   backgroundColor: "var(--operon-color-surface)",
   boxShadow: "var(--operon-shadow-lg)",
   padding: "4px",
@@ -447,7 +445,6 @@ export const completionEmptyStyle = css({
   zIndex: 20,
   padding: "8px 10px",
   borderRadius: "var(--operon-radius-sm)",
-  border: "1px solid var(--operon-color-border)",
   backgroundColor: "var(--operon-color-surface)",
   boxShadow: "var(--operon-shadow-lg)",
   fontSize: "11px",

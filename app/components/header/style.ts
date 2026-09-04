@@ -32,7 +32,7 @@ export const mobileBreadcrumbBarStyle = css({
     whiteSpace: "nowrap",
     WebkitOverflowScrolling: "touch",
     padding: "6px 12px",
-    borderTop: "1px solid var(--operon-color-border-subtle, #f0f0f0)",
+    borderTop: "1px solid var(--operon-color-border-subtle, #ede9e6)",
     backgroundColor: "var(--operon-color-surface, #ffffff)",
     scrollbarWidth: "none",
   },

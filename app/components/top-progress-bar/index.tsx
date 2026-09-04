@@ -7,7 +7,7 @@ const progressBarStyle = css({
   top: 0,
   left: 0,
   height: "3px",
-  backgroundColor: "var(--operon-color-primary, #6366f1)",
+  backgroundColor: "var(--operon-color-primary, #d33a5c)",
   zIndex: 9999,
   transition: "width 0.3s ease, opacity 0.3s ease",
 });

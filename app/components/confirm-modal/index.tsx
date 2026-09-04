@@ -43,7 +43,7 @@ export const ConfirmModal = ({
             style={
               isDestructive
                 ? {
-                    backgroundColor: "var(--operon-color-danger, #ef4444)",
+                    backgroundColor: "var(--operon-color-danger, #c2321f)",
                     borderColor: "transparent",
                   }
                 : {}
@@ -58,7 +58,7 @@ export const ConfirmModal = ({
         <p
           style={{
             margin: 0,
-            color: "var(--operon-color-text, #1a1a2e)",
+            color: "var(--operon-color-text, #16151a)",
             fontSize: "15px",
             lineHeight: 1.6,
           }}

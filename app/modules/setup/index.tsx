@@ -122,8 +122,8 @@ init({
             style={{
               ...classes.dotStyle.style,
               background: isReceiving
-                ? "var(--operon-color-success, #1a9d5a)"
-                : "var(--operon-color-text-subtle, #999)",
+                ? "var(--operon-color-success, #0f8b4c)"
+                : "var(--operon-color-text-subtle, #b4b0b3)",
             }}
           />
           {isReceiving

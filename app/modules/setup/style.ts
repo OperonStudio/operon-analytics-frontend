@@ -15,9 +15,8 @@ export const pageStyle = css({
 });
 
 export const stepStyle = css({
-  border: "1px solid var(--operon-color-border)",
-  borderRadius: "var(--operon-radius-lg, 12px)",
-  background: "var(--operon-color-surface)",
+  borderRadius: "var(--operon-radius-xl)",
+  backgroundColor: "var(--operon-color-surface-sunken)",
   padding: "20px",
   display: "flex",
   flexDirection: "column",
@@ -41,7 +40,7 @@ export const stepNumberStyle = css({
   fontSize: "12px",
   fontWeight: 600,
   background: "var(--operon-color-primary)",
-  color: "var(--operon-color-on-primary, #fff)",
+  color: "var(--operon-color-text-inverse)",
 });
 
 export const stepTitleStyle = css({
@@ -58,15 +57,14 @@ export const bodyStyle = css({
 
 export const codeBlockStyle = css({
   position: "relative",
-  fontFamily: "var(--operon-font-mono, ui-monospace, monospace)",
+  fontFamily: "var(--operon-typography-mono)",
   fontSize: "12px",
   lineHeight: 1.7,
   whiteSpace: "pre",
   overflowX: "auto",
   padding: "12px 14px",
-  borderRadius: "var(--operon-radius-md, 8px)",
-  background: "var(--operon-color-background-subtle, rgba(0,0,0,0.04))",
-  border: "1px solid var(--operon-color-border)",
+  borderRadius: "var(--operon-radius-lg)",
+  background: "var(--operon-color-surface-sunken)",
   color: "var(--operon-color-text)",
 });
 
@@ -99,7 +97,7 @@ export const envRowStyle = css({
   gap: "12px",
   padding: "10px 12px",
   border: "1px solid var(--operon-color-border)",
-  borderRadius: "var(--operon-radius-md, 8px)",
+  borderRadius: "var(--operon-radius-md, 10px)",
 });
 
 export const envNameStyle = css({
@@ -117,7 +115,7 @@ export const warningStyle = css({
   fontSize: "12px",
   lineHeight: 1.6,
   padding: "10px 12px",
-  borderRadius: "var(--operon-radius-md, 8px)",
-  border: "1px solid var(--operon-color-warning, #e6a700)",
+  borderRadius: "var(--operon-radius-md, 10px)",
+  border: "1px solid var(--operon-color-warning, #b4790c)",
   color: "var(--operon-color-text)",
 });
