@@ -20,9 +20,3 @@ export const appLineStyle = css({
   lineHeight: 1.3,
   letterSpacing: "0.03em",
 });
-
-export const themeToggleStyle = css({
-  display: "flex",
-  alignItems: "center",
-  gap: "6px",
-});

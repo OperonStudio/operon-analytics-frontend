@@ -1,5 +1,5 @@
 import { AuthProvider, RequireAuth } from "@operonstudio/auth";
-import { ThemeProvider, Toaster } from "@operonstudio/ui";
+import { ThemeProvider, Toaster, themeBootScript } from "@operonstudio/ui";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
@@ -25,10 +25,14 @@ export const RootDocument = ({ children }: { children: React.ReactNode }) => {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: themeBootScript }}
+        />
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider defaultDark={false}>
+        <ThemeProvider>
           {/* The session is an httpOnly cookie scoped to the domain, so it is
               already present on this subdomain. The URL token bridge this
               replaces passed a JWT through the query string, which put it in

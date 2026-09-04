@@ -5,16 +5,12 @@ import {
   Code,
   Database,
   LayoutDashboard,
-  Moon,
-  Sun,
 } from "@operonstudio/icons";
 import {
   AppShell,
   type AppShellNavGroup,
   type AppShellNavItem,
   type AppShellProduct,
-  Toggle,
-  useTheme,
 } from "@operonstudio/ui";
 import { Link, useLocation, useMatches } from "@tanstack/react-router";
 import {
@@ -71,7 +67,6 @@ export const DashboardLayout = ({
   const matches = useMatches();
   const matchWithSidebar = matches.find((m) => m.staticData?.sidebarGroups);
   const { sidebarGroups = [] } = matchWithSidebar?.staticData || {};
-  const { isDark, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
 
   const navGroups: AppShellNavGroup[] = sidebarGroups.map(
@@ -126,31 +121,10 @@ export const DashboardLayout = ({
       sidebarHeader={<ScopeSwitcher />}
       topbarStart={<Header />}
       sidebarFooter={
-        <>
-          <div>
-            <div {...classes.orgLineStyle}>{ORG_NAME}</div>
-            <div {...classes.appLineStyle}>{APP_NAME}</div>
-          </div>
-          <div {...classes.themeToggleStyle}>
-            <Sun
-              size={12}
-              color={
-                !isDark
-                  ? "var(--operon-color-primary)"
-                  : "var(--operon-color-text-subtle)"
-              }
-            />
-            <Toggle size="sm" checked={isDark} onChange={toggleTheme} />
-            <Moon
-              size={12}
-              color={
-                isDark
-                  ? "var(--operon-color-primary)"
-                  : "var(--operon-color-text-subtle)"
-              }
-            />
-          </div>
-        </>
+        <div>
+          <div {...classes.orgLineStyle}>{ORG_NAME}</div>
+          <div {...classes.appLineStyle}>{APP_NAME}</div>
+        </div>
       }
       user={
         user
