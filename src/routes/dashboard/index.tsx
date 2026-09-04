@@ -1,8 +1,8 @@
-import { DashboardOverview } from "#/modules/dashboard";
 import { createFileRoute } from "@tanstack/react-router";
+import { DashboardModule } from "#/modules/dashboard";
 
 export const Route = createFileRoute("/dashboard/")({
-  component: DashboardOverview,
+  component: DashboardModule,
   staticData: {
     pageHeaderData: {
       title: "Analytics Dashboard",

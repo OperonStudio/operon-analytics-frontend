@@ -10,8 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContextIndexRouteImport } from './routes/context/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as FunnelsIndexRouteImport } from './routes/funnels/index'
+import { Route as SetupIndexRouteImport } from './routes/setup/index'
 import { Route as TelemetryIndexRouteImport } from './routes/telemetry/index'
 import { Route as TrackersIndexRouteImport } from './routes/trackers/index'
 import { Route as VisualEditorIndexRouteImport } from './routes/visual-editor/index'
@@ -21,14 +22,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContextIndexRoute = ContextIndexRouteImport.update({
+  id: '/context/',
+  path: '/context/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FunnelsIndexRoute = FunnelsIndexRouteImport.update({
-  id: '/funnels/',
-  path: '/funnels/',
+const SetupIndexRoute = SetupIndexRouteImport.update({
+  id: '/setup/',
+  path: '/setup/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TelemetryIndexRoute = TelemetryIndexRouteImport.update({
@@ -49,16 +55,18 @@ const VisualEditorIndexRoute = VisualEditorIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/context/': typeof ContextIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/funnels/': typeof FunnelsIndexRoute
+  '/setup/': typeof SetupIndexRoute
   '/telemetry/': typeof TelemetryIndexRoute
   '/trackers/': typeof TrackersIndexRoute
   '/visual-editor/': typeof VisualEditorIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/context': typeof ContextIndexRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/funnels': typeof FunnelsIndexRoute
+  '/setup': typeof SetupIndexRoute
   '/telemetry': typeof TelemetryIndexRoute
   '/trackers': typeof TrackersIndexRoute
   '/visual-editor': typeof VisualEditorIndexRoute
@@ -66,8 +74,9 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/context/': typeof ContextIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/funnels/': typeof FunnelsIndexRoute
+  '/setup/': typeof SetupIndexRoute
   '/telemetry/': typeof TelemetryIndexRoute
   '/trackers/': typeof TrackersIndexRoute
   '/visual-editor/': typeof VisualEditorIndexRoute
@@ -76,24 +85,27 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/context/'
     | '/dashboard/'
-    | '/funnels/'
+    | '/setup/'
     | '/telemetry/'
     | '/trackers/'
     | '/visual-editor/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/context'
     | '/dashboard'
-    | '/funnels'
+    | '/setup'
     | '/telemetry'
     | '/trackers'
     | '/visual-editor'
   id:
     | '__root__'
     | '/'
+    | '/context/'
     | '/dashboard/'
-    | '/funnels/'
+    | '/setup/'
     | '/telemetry/'
     | '/trackers/'
     | '/visual-editor/'
@@ -101,8 +113,9 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContextIndexRoute: typeof ContextIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
-  FunnelsIndexRoute: typeof FunnelsIndexRoute
+  SetupIndexRoute: typeof SetupIndexRoute
   TelemetryIndexRoute: typeof TelemetryIndexRoute
   TrackersIndexRoute: typeof TrackersIndexRoute
   VisualEditorIndexRoute: typeof VisualEditorIndexRoute
@@ -117,6 +130,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/context/': {
+      id: '/context/'
+      path: '/context'
+      fullPath: '/context/'
+      preLoaderRoute: typeof ContextIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/': {
       id: '/dashboard/'
       path: '/dashboard'
@@ -124,11 +144,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/funnels/': {
-      id: '/funnels/'
-      path: '/funnels'
-      fullPath: '/funnels/'
-      preLoaderRoute: typeof FunnelsIndexRouteImport
+    '/setup/': {
+      id: '/setup/'
+      path: '/setup'
+      fullPath: '/setup/'
+      preLoaderRoute: typeof SetupIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/telemetry/': {
@@ -157,8 +177,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContextIndexRoute: ContextIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
-  FunnelsIndexRoute: FunnelsIndexRoute,
+  SetupIndexRoute: SetupIndexRoute,
   TelemetryIndexRoute: TelemetryIndexRoute,
   TrackersIndexRoute: TrackersIndexRoute,
   VisualEditorIndexRoute: VisualEditorIndexRoute,

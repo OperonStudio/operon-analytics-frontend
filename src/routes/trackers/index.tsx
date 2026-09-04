@@ -1,8 +1,8 @@
-import { TrackersView } from "#/modules/trackers";
 import { createFileRoute } from "@tanstack/react-router";
+import { TrackersModule } from "#/modules/trackers";
 
 export const Route = createFileRoute("/trackers/")({
-  component: TrackersView,
+  component: TrackersModule,
   staticData: {
     pageHeaderData: {
       title: "Visual Trackers",

@@ -1,7 +1,7 @@
-import type { PageHeaderAction, PageHeaderData } from "#/common/interfaces";
-import { useHeaderActionHandler } from "#/contexts/header-actions";
 import { Box, Button } from "@operonstudio/ui";
 import { useMatches } from "@tanstack/react-router";
+import type { PageHeaderAction, PageHeaderData } from "#/common/interfaces";
+import { useHeaderActionHandler } from "#/contexts/header-actions";
 import * as classes from "./style";
 
 function ActionButton({ action }: { action: PageHeaderAction }) {
@@ -21,23 +21,29 @@ function ActionButton({ action }: { action: PageHeaderAction }) {
   );
 }
 
+/** A route match may carry page header data in any of three places. */
+type WithPageHeader = { pageHeaderData?: Partial<PageHeaderData> };
+
+function headerDataOf(source: unknown): Partial<PageHeaderData> {
+  return (source as WithPageHeader | undefined)?.pageHeaderData ?? {};
+}
+
 export function PageHeader() {
   const matches = useMatches();
   const matchWithPageHeaderData = matches.find(
     (m) =>
-      (m.context as any)?.pageHeaderData ||
-      (m.loaderData as any)?.pageHeaderData ||
+      headerDataOf(m.context).title ||
+      headerDataOf(m.loaderData).title ||
       m.staticData?.pageHeaderData,
   );
 
   if (!matchWithPageHeaderData) return null;
 
-  const contextData =
-    (matchWithPageHeaderData.context as any)?.pageHeaderData || {};
-  const loaderData =
-    (matchWithPageHeaderData.loaderData as any)?.pageHeaderData || {};
-  const staticData =
-    (matchWithPageHeaderData.staticData as any)?.pageHeaderData || {};
+  // Later sources win: a loader can override what the route declared
+  // statically, and context overrides both.
+  const contextData = headerDataOf(matchWithPageHeaderData.context);
+  const loaderData = headerDataOf(matchWithPageHeaderData.loaderData);
+  const staticData = headerDataOf(matchWithPageHeaderData.staticData);
 
   const pageHeaderData = {
     ...staticData,

@@ -27,8 +27,6 @@ export const headerSubtitleStyle = style({
   marginTop: "4px",
 });
 
-
-
 export const statLabelStyle = style({
   fontSize: "14px",
   fontWeight: 600,

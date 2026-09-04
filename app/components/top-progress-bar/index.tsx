@@ -1,6 +1,6 @@
+import { css } from "@morph-css/kit";
 import { useIsFetching, useIsMutating } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { css } from "@morph-css/kit";
 
 const progressBarStyle = css({
   position: "fixed",
@@ -26,7 +26,7 @@ export const TopProgressBar = () => {
     if (isLoading) {
       setVisible(true);
       setProgress(15);
-      
+
       interval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 90) return prev;
@@ -35,7 +35,7 @@ export const TopProgressBar = () => {
       }, 300);
     } else {
       setProgress(100);
-      
+
       const hideTimeout = setTimeout(() => {
         setVisible(false);
         setProgress(0);

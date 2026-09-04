@@ -1,6 +1,6 @@
+import { queryOptions } from "@tanstack/react-query";
 import { ENDPOINTS } from "#/common/endpoints";
 import { operonApiClient } from "#/libs/apiClient";
-import { queryOptions } from "@tanstack/react-query";
 import type { Usage } from "./types";
 
 export const getUsageOptions = (workspaceId: string) =>

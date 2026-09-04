@@ -1,11 +1,17 @@
 import { RootDocument } from "#/modules/root-document";
 import "@morph-css/kit/css";
-import { Command, Layers, LayoutDashboard, Terminal } from "@operonstudio/icons";
+import {
+  Braces,
+  Eye,
+  Layers,
+  LayoutDashboard,
+  Plug,
+  Terminal,
+} from "@operonstudio/icons";
 import operonMorphCss from "@operonstudio/ui/dist/morphcss.css?url";
 import operonCss from "@operonstudio/ui/dist/style.css?url";
-import { createRootRouteWithContext } from "@tanstack/react-router";
-
 import type { QueryClient } from "@tanstack/react-query";
+import { createRootRouteWithContext } from "@tanstack/react-router";
 
 interface MyRouterContext {
   queryClient: QueryClient;
@@ -65,10 +71,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         title: "ANALYTICS",
         items: [
           { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-          { label: "Visual Trackers", icon: Layers, href: "/trackers" },
-          { label: "Telemetry Logs", icon: Terminal, href: "/telemetry" },
-          { label: "User Funnels", icon: Command, href: "/funnels" },
-          { label: "Visual Editor", icon: Layers, href: "/visual-editor" },
+          { label: "Install", icon: Plug, href: "/setup" },
+          { label: "Visual Editor", icon: Eye, href: "/visual-editor" },
+          { label: "Trackers", icon: Layers, href: "/trackers" },
+          { label: "Context", icon: Braces, href: "/context" },
+          { label: "Events", icon: Terminal, href: "/telemetry" },
         ],
       },
     ],

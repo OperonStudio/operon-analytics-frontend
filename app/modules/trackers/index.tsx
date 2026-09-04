@@ -1,108 +1,166 @@
-import { Plus } from "@operonstudio/icons";
-import { Box, Button } from "@operonstudio/ui";
-import { useTrackers } from "./hooks";
+import { Search, Trash2, Zap } from "@operonstudio/icons";
+import { Box, Button, Input, Toggle, toast } from "@operonstudio/ui";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
+import {
+  deleteTrackerMutation,
+  toggleTrackerMutation,
+  trackersQuery,
+} from "#/common/api/queries";
+import { queryKeys } from "#/common/api/query-keys";
+import { TRIGGERS } from "#/common/api/types";
+import { useScope } from "#/common/scope";
 import * as classes from "./styles";
 
-export const TrackersView = () => {
-  const {
-    trackers,
-    isAddOpen,
-    setIsAddOpen,
-    name,
-    setName,
-    selector,
-    setSelector,
-    eventType,
-    setEventType,
-    handleCreate,
-  } = useTrackers();
+/**
+ * Every element bound to an event.
+ *
+ * These are created in the visual editor rather than here, so this page is a
+ * register and not a form. It used to list fixtures unrelated to anything the
+ * editor produced.
+ */
+export const TrackersModule = () => {
+  const queryClient = useQueryClient();
+  const { scope, isReady } = useScope();
+  const { data: trackers = [], isLoading } = useQuery(trackersQuery(scope));
+  const [search, setSearch] = useState("");
+
+  const refresh = () =>
+    queryClient.invalidateQueries({ queryKey: queryKeys.trackers(scope) });
+
+  const toggle = useMutation({
+    ...toggleTrackerMutation(scope),
+    onSuccess: refresh,
+    onError: () => toast.error("Could not change that tracker"),
+  });
+  const remove = useMutation({
+    ...deleteTrackerMutation(scope),
+    onSuccess: () => {
+      refresh();
+      toast.success("Tracker removed");
+    },
+    onError: () => toast.error("Could not remove that tracker"),
+  });
+
+  const visible = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return trackers;
+    return trackers.filter(
+      (t) =>
+        t.eventName.toLowerCase().includes(query) ||
+        t.operonId.toLowerCase().includes(query),
+    );
+  }, [trackers, search]);
+
+  if (!isReady) {
+    return (
+      <Box {...classes.emptyStyle}>
+        Choose a project and environment to see its trackers.
+      </Box>
+    );
+  }
+
+  if (isLoading) {
+    return <Box {...classes.emptyStyle}>Loading trackers…</Box>;
+  }
+
+  if (trackers.length === 0) {
+    return (
+      <Box {...classes.pageStyle}>
+        <Box {...classes.emptyCardStyle}>
+          <Box {...classes.emptyIconStyle}>
+            <Zap size={20} />
+          </Box>
+          <Box {...classes.emptyTitleStyle}>No trackers yet</Box>
+          <Box {...classes.emptyBodyStyle}>
+            Trackers are created by binding an event to an element. Open the
+            visual editor, load a page running the Operon SDK, and pick
+            something to track.
+          </Box>
+          <Link to="/visual-editor" style={{ textDecoration: "none" }}>
+            <Button size="sm">Open the visual editor</Button>
+          </Link>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
-    <Box {...classes.pageContainerStyle}>
-      <Box {...classes.headerRowStyle}>
-        <Box>
-          <Box {...classes.titleStyle}>Visual Event Trackers</Box>
-          <Box {...classes.subtitleStyle}>
-            Track DOM clicks, form submissions, and rule executions via Visual
-            Editor
-          </Box>
-        </Box>
-        <Button
-          variant="primary"
-          size="sm"
-          startIcon={<Plus size={14} />}
-          onClick={() => setIsAddOpen(true)}
-        >
-          Attach Tracker
-        </Button>
+    <Box {...classes.pageStyle}>
+      <Box {...classes.searchRowStyle}>
+        <Input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Filter by event or element"
+          startIcon={<Search size={15} />}
+          variant="filled"
+          fullWidth
+        />
+        <Link to="/visual-editor" style={{ textDecoration: "none" }}>
+          <Button variant="outline" size="sm" style={{ gap: 6 }}>
+            <Zap size={14} /> Bind another
+          </Button>
+        </Link>
       </Box>
 
-      {isAddOpen && (
-        <Box {...classes.formContainerStyle}>
-          <Box style={{ fontSize: "14px", fontWeight: 600 }}>
-            New Event Tracker
-          </Box>
-          <input
-            type="text"
-            placeholder="Tracker Name (e.g. Add Collection Button)"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            {...classes.inputStyle}
-          />
-          <input
-            type="text"
-            placeholder="DOM Selector (e.g. button#add-collection)"
-            value={selector}
-            onChange={(e) => setSelector(e.target.value)}
-            {...classes.inputStyle}
-          />
-          <Box display="flex" gap={12}>
-            <select
-              value={eventType}
-              onChange={(e) => setEventType(e.target.value)}
-              {...classes.inputStyle}
-            >
-              <option value="click">Click</option>
-              <option value="submit">Submit</option>
-              <option value="change">Change</option>
-            </select>
-            <Button
-              size="sm"
-              onClick={handleCreate}
-              disabled={!name || !selector}
-            >
-              Save
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => setIsAddOpen(false)}
-            >
-              Cancel
-            </Button>
-          </Box>
+      <Box {...classes.tableStyle}>
+        <Box {...classes.headRowStyle}>
+          <Box>Event</Box>
+          <Box>Element</Box>
+          <Box>Fires on</Box>
+          <Box {...classes.numericCellStyle}>Fired</Box>
+          <Box />
         </Box>
-      )}
 
-      <Box {...classes.gridStyle}>
-        {trackers.map((tr) => (
-          <Box key={tr.id} {...classes.trackerCardStyle}>
-            <Box display="flex" justify="space-between" align="center">
-              <Box {...classes.trackerNameStyle}>{tr.name}</Box>
-              <span {...classes.statusDotStyle}>{tr.status}</span>
+        {visible.map((tracker) => (
+          <Box key={tracker.id} {...classes.rowStyle}>
+            <Box {...classes.eventCellStyle}>
+              <Box {...classes.eventNameStyle}>{tracker.eventName}</Box>
+              {tracker.sourceUrl && (
+                <Box {...classes.sourceStyle}>{tracker.sourceUrl}</Box>
+              )}
             </Box>
-            <Box {...classes.selectorTextStyle}>
-              Selector:{" "}
-              <code {...classes.codeTagStyle}>{tr.selector}</code>
+
+            <Box {...classes.monoCellStyle}>{tracker.operonId}</Box>
+
+            <Box {...classes.triggerCellStyle}>
+              {TRIGGERS.find((t) => t.value === tracker.trigger)?.label ??
+                tracker.trigger}
             </Box>
-            <Box {...classes.trackerFooterStyle}>
-              <span>
-                Fired: <strong>{tr.triggersCount.toLocaleString()}</strong> times
-              </span>
-              <span>{tr.lastFired}</span>
+
+            {/* Counted from the events this tracker actually produced. */}
+            <Box {...classes.numericCellStyle}>
+              {(tracker.firedCount ?? 0).toLocaleString()}
+            </Box>
+
+            <Box {...classes.actionsCellStyle}>
+              <Toggle
+                size="sm"
+                checked={tracker.enabled}
+                onChange={() =>
+                  toggle.mutate({
+                    id: tracker.id,
+                    enabled: !tracker.enabled,
+                  })
+                }
+              />
+              <Button
+                variant="ghost"
+                size="sm"
+                aria-label={`Remove ${tracker.eventName}`}
+                onClick={() => remove.mutate(tracker.id)}
+                style={{ color: "var(--operon-color-danger)" }}
+              >
+                <Trash2 size={15} />
+              </Button>
             </Box>
           </Box>
         ))}
+
+        {visible.length === 0 && (
+          <Box {...classes.emptyStyle}>Nothing matches that filter.</Box>
+        )}
       </Box>
     </Box>
   );

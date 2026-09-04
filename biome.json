@@ -8,6 +8,7 @@
 	"files": {
 		"ignoreUnknown": false,
 		"includes": [
+			"**/app/**/*",
 			"**/src/**/*",
 			"**/.vscode/**/*",
 			"**/index.html",
@@ -18,7 +19,8 @@
 	},
 	"formatter": {
 		"enabled": true,
-		"indentStyle": "tab"
+		"indentStyle": "space",
+		"indentWidth": 2
 	},
 	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"linter": {
@@ -33,4 +35,3 @@
 		}
 	}
 }
-

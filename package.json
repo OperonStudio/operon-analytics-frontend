@@ -18,9 +18,9 @@
   },
   "dependencies": {
     "@morph-css/kit": "^0.4.9",
-    "@operonstudio/auth": "^1.0.1",
+    "@operonstudio/auth": "^1.0.3",
     "@operonstudio/icons": "^1.0.19",
-    "@operonstudio/request": "^1.0.4",
+    "@operonstudio/request": "^1.0.5",
     "@operonstudio/ui": "^1.0.22",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-query": "latest",
@@ -31,7 +31,6 @@
     "@tanstack/react-start": "latest",
     "@tanstack/router-plugin": "^1.132.0",
     "@xyflow/react": "^12.11.2",
-    "puppeteer": "^25.4.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

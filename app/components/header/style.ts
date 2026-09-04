@@ -64,4 +64,3 @@ export const shortcutIconStyle = css({
 export const iconButtonStyle = css({
   padding: "6px",
 });
-

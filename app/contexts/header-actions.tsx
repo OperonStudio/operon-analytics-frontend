@@ -1,7 +1,10 @@
-import React, {
+import type React from "react";
+import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -18,6 +21,11 @@ const HeaderActionContext = createContext<HeaderActionContextValue | null>(
   null,
 );
 
+/**
+ * Lets the page header render buttons whose behaviour lives in the page below
+ * it. The header is mounted once by the shell, so a page publishes its actions
+ * here on mount and withdraws them on unmount.
+ */
 export const HeaderActionProvider = ({
   children,
 }: {
@@ -25,32 +33,39 @@ export const HeaderActionProvider = ({
 }) => {
   const [handlers, setHandlers] = useState<Record<string, ActionHandler>>({});
 
-  const register = (actions: Record<string, ActionHandler>) => {
+  // register and unregister are memoised because consumers depend on them from
+  // an effect. Recreating them each render would re-run that effect on every
+  // state change, which re-registers, which sets state again.
+  const register = useCallback((actions: Record<string, ActionHandler>) => {
     setHandlers((prev) => ({ ...prev, ...actions }));
-  };
+  }, []);
 
-  const unregister = (actionIds: string[]) => {
+  const unregister = useCallback((actionIds: string[]) => {
     setHandlers((prev) => {
       const next = { ...prev };
-      actionIds.forEach((id) => {
-        delete next[id];
-      });
+      for (const id of actionIds) delete next[id];
       return next;
     });
-  };
+  }, []);
+
+  const value = useMemo(
+    () => ({ handlers, register, unregister }),
+    [handlers, register, unregister],
+  );
 
   return (
-    <HeaderActionContext.Provider value={{ handlers, register, unregister }}>
+    <HeaderActionContext.Provider value={value}>
       {children}
     </HeaderActionContext.Provider>
   );
 };
 
 /**
- * Hook for page components to register their header actions.
- * Automatically handles registration on mount and cleanup on unmount.
- * Prevents stale closures by maintaining a ref to the latest handlers.
- * Keep this or change the logic if u want
+ * Registers a page's header actions for as long as the page is mounted.
+ *
+ * The handlers are held in a ref and invoked through a stable proxy, so a page
+ * can pass a fresh inline object every render without re-registering, and the
+ * proxy always calls the current closure rather than the one from mount.
  */
 export const useHeaderActions = (actions: Record<string, ActionHandler>) => {
   const context = useContext(HeaderActionContext);
@@ -60,27 +75,28 @@ export const useHeaderActions = (actions: Record<string, ActionHandler>) => {
     );
   }
 
+  const { register, unregister } = context;
   const actionsRef = useRef(actions);
 
   useEffect(() => {
     actionsRef.current = actions;
   }, [actions]);
 
+  // Registration is keyed on the set of action ids, not the handlers, so a
+  // page that renames or adds an action re-registers and one that merely
+  // re-renders does not.
+  const actionIdKey = Object.keys(actions).sort().join("|");
+
   useEffect(() => {
+    const actionIds = actionIdKey ? actionIdKey.split("|") : [];
     const proxyActions: Record<string, ActionHandler> = {};
-    const actionIds = Object.keys(actionsRef.current);
-    actionIds.forEach((id) => {
-      proxyActions[id] = () => {
-        actionsRef.current[id]?.();
-      };
-    });
+    for (const id of actionIds) {
+      proxyActions[id] = () => actionsRef.current[id]?.();
+    }
 
-    context.register(proxyActions);
-
-    return () => {
-      context.unregister(actionIds);
-    };
-  }, []);
+    register(proxyActions);
+    return () => unregister(actionIds);
+  }, [actionIdKey, register, unregister]);
 };
 
 export const useHeaderActionHandler = (

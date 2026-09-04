@@ -1,5 +1,5 @@
-import { TelemetryLogsView } from "#/modules/telemetry";
 import { createFileRoute } from "@tanstack/react-router";
+import { TelemetryLogsView } from "#/modules/telemetry";
 
 export const Route = createFileRoute("/telemetry/")({
   component: TelemetryLogsView,

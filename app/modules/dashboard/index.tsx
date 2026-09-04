@@ -1,178 +1,197 @@
-import { Command, Plug, User, Zap } from "@operonstudio/icons";
-import { Box } from "@operonstudio/ui";
-import { useDashboard } from "./hooks";
+import { Zap } from "@operonstudio/icons";
+import { Box, Button } from "@operonstudio/ui";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
+import { overviewQuery, trackersQuery } from "#/common/api/queries";
+import { useScope } from "#/common/scope";
 import * as classes from "./styles";
 
-export const DashboardOverview = () => {
-  const {
-    timeRange,
-    setTimeRange,
-    apiRequests,
-    storageBytes,
-    bandwidthBytes,
-    activeUsers,
-    topEndpoints,
-    formatBytes,
-  } = useDashboard();
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+/**
+ * Workspace overview.
+ *
+ * Every figure here is measured. The previous version drew a hand-built SVG
+ * sparkline over invented numbers and a table of fabricated endpoint latencies,
+ * which looks like a working product and tells you nothing.
+ */
+export const DashboardModule = () => {
+  const { scope, isReady } = useScope();
+  const { data: overview, isLoading } = useQuery(overviewQuery(scope, 7));
+  const { data: trackers = [] } = useQuery(trackersQuery(scope));
+
+  const daily = overview?.daily ?? [];
+  const peak = daily.reduce((max, point) => Math.max(max, point.count), 0);
+  const weekTotal = daily.reduce((sum, point) => sum + point.count, 0);
+
+  if (!isReady) {
+    return (
+      <Box {...classes.pageStyle}>
+        <Box {...classes.guideStyle}>
+          <Box {...classes.guideTextStyle}>
+            Choose a project and environment in the sidebar. Trackers and events
+            belong to one of each, so there is nothing to measure until both are
+            picked.
+          </Box>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
-    <Box {...classes.pageContainerStyle}>
-      {/* Toolbar */}
-      <Box {...classes.toolbarStyle}>
-        <Box {...classes.timePillsStyle}>
-          {(["24h", "7d", "30d", "90d"] as const).map((range) => (
-            <button
-              key={range}
-              type="button"
-              onClick={() => setTimeRange(range)}
-              {...(timeRange === range
-                ? classes.pillButtonActiveStyle
-                : classes.pillButtonStyle)}
-            >
-              {range.toUpperCase()}
-            </button>
-          ))}
-        </Box>
+    <Box {...classes.pageStyle}>
+      <Box {...classes.metricsStyle}>
+        <Metric
+          label="Events"
+          value={isLoading ? null : (overview?.totalEvents ?? 0)}
+          note={
+            weekTotal > 0
+              ? `${weekTotal.toLocaleString()} in last 7 days`
+              : "all time"
+          }
+        />
+        <Metric
+          label="Active trackers"
+          value={isLoading ? null : (overview?.activeTrackers ?? 0)}
+          note={
+            trackers.length > 0
+              ? `${trackers.length} bound in total`
+              : undefined
+          }
+        />
+        <Metric
+          label="Unique visitors"
+          value={isLoading ? null : (overview?.uniqueVisitors ?? 0)}
+        />
       </Box>
 
-      {/* KPI Cards */}
-      <Box {...classes.kpiGridStyle}>
-        <Box {...classes.kpiCardStyle}>
-          <Box display="flex" justify="space-between" align="center">
-            <Box {...classes.kpiLabelStyle}>API Requests</Box>
-            <Plug size={16} color="var(--operon-color-primary, #6366f1)" />
+      <Box {...classes.gridStyle}>
+        <Box {...classes.panelStyle}>
+          <Box {...classes.panelHeaderStyle}>
+            <Box {...classes.panelTitleStyle}>
+              {weekTotal > 0 ? "Events" : "No events yet"}
+            </Box>
+            {weekTotal > 0 && (
+              <Box {...classes.panelMetaStyle}>
+                last 7 days · peak {peak.toLocaleString()}/day
+              </Box>
+            )}
           </Box>
-          <Box {...classes.kpiValueStyle}>{apiRequests.toLocaleString()}</Box>
-          <Box {...classes.kpiSubtextStyle}>
-            Avg 42.8 req/s
+
+          <Box {...classes.panelBodyStyle}>
+            {weekTotal > 0 ? (
+              <Chart daily={daily} peak={peak} />
+            ) : (
+              <Box {...classes.guideStyle}>
+                <Box {...classes.guideTextStyle}>
+                  Bind an element to an event in the visual editor, then load
+                  the page with the Operon SDK installed. Events show up here
+                  within a few seconds of firing.
+                </Box>
+                <Link to="/visual-editor" style={{ textDecoration: "none" }}>
+                  <Button size="sm" style={{ gap: 6 }}>
+                    <Zap size={14} /> Open the visual editor
+                  </Button>
+                </Link>
+              </Box>
+            )}
           </Box>
         </Box>
 
-        <Box {...classes.kpiCardStyle}>
-          <Box display="flex" justify="space-between" align="center">
-            <Box {...classes.kpiLabelStyle}>Response Latency (p95)</Box>
-            <Zap size={16} color="var(--operon-color-success, #10b981)" />
+        <Box {...classes.panelStyle}>
+          <Box {...classes.panelHeaderStyle}>
+            <Box {...classes.panelTitleStyle}>Top events</Box>
           </Box>
-          <Box {...classes.kpiValueStyle}>36.4 ms</Box>
-          <Box {...classes.kpiSubtextStyle}>
-            p50: 18ms · p99: 84ms
+          <Box {...classes.listStyle}>
+            {(overview?.topEvents ?? []).map((entry) => (
+              <Box key={entry.eventName} {...classes.listRowStyle}>
+                <Box {...classes.listLabelStyle}>{entry.eventName}</Box>
+                <Box {...classes.listCountStyle}>
+                  {entry.count.toLocaleString()}
+                </Box>
+              </Box>
+            ))}
+            {(overview?.topEvents ?? []).length === 0 && (
+              <Box {...classes.listEmptyStyle}>Ranked once events arrive.</Box>
+            )}
           </Box>
-        </Box>
-
-        <Box {...classes.kpiCardStyle}>
-          <Box display="flex" justify="space-between" align="center">
-            <Box {...classes.kpiLabelStyle}>Data Throughput</Box>
-            <Command size={16} color="var(--operon-color-warning, #f59e0b)" />
-          </Box>
-          <Box {...classes.kpiValueStyle}>{formatBytes(bandwidthBytes)}</Box>
-          <Box {...classes.kpiSubtextStyle}>
-            Storage: {formatBytes(storageBytes)}
-          </Box>
-        </Box>
-
-        <Box {...classes.kpiCardStyle}>
-          <Box display="flex" justify="space-between" align="center">
-            <Box {...classes.kpiLabelStyle}>Active Users</Box>
-            <User size={16} color="var(--operon-color-text-muted, #666)" />
-          </Box>
-          <Box {...classes.kpiValueStyle}>{activeUsers.toLocaleString()}</Box>
-          <Box {...classes.kpiSubtextStyle}>
-            14 projects · 8 API keys
-          </Box>
-        </Box>
-      </Box>
-
-      {/* Traffic Chart */}
-      <Box {...classes.chartContainerStyle}>
-        <Box {...classes.chartTitleStyle}>
-          Request Volume
-        </Box>
-        <Box {...classes.chartSubtitleStyle}>
-          Hourly traffic over past {timeRange.toUpperCase()}
-        </Box>
-
-        <Box style={{ width: "100%", height: "180px" }}>
-          <svg
-            width="100%"
-            height="100%"
-            viewBox="0 0 800 180"
-            preserveAspectRatio="none"
-          >
-            <defs>
-              <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="0%"
-                  stopColor="var(--operon-color-primary, #6366f1)"
-                  stopOpacity="0.15"
-                />
-                <stop
-                  offset="100%"
-                  stopColor="var(--operon-color-primary, #6366f1)"
-                  stopOpacity="0"
-                />
-              </linearGradient>
-            </defs>
-            <line
-              x1="0" y1="45" x2="800" y2="45"
-              stroke="var(--operon-color-border, #eaeaea)"
-              strokeDasharray="4"
-            />
-            <line
-              x1="0" y1="90" x2="800" y2="90"
-              stroke="var(--operon-color-border, #eaeaea)"
-              strokeDasharray="4"
-            />
-            <line
-              x1="0" y1="135" x2="800" y2="135"
-              stroke="var(--operon-color-border, #eaeaea)"
-              strokeDasharray="4"
-            />
-            <path
-              d="M 0,140 Q 100,50 200,100 T 400,60 T 600,90 T 800,30 L 800,180 L 0,180 Z"
-              fill="url(#areaGrad)"
-            />
-            <path
-              d="M 0,140 Q 100,50 200,100 T 400,60 T 600,90 T 800,30"
-              fill="none"
-              stroke="var(--operon-color-primary, #6366f1)"
-              strokeWidth="2"
-            />
-          </svg>
-        </Box>
-      </Box>
-
-      {/* Top Endpoints Table */}
-      <Box {...classes.tableContainerStyle}>
-        <Box {...classes.tableTitleStyle}>Top Endpoints</Box>
-        <Box style={{ overflowX: "auto" }}>
-          <table {...classes.tableStyle}>
-            <thead>
-              <tr {...classes.tableHeadStyle}>
-                <th {...classes.thStyle}>Endpoint</th>
-                <th {...classes.thStyle}>Invocations</th>
-                <th {...classes.thStyle}>p95 Latency</th>
-                <th {...classes.thStyle}>Error Rate</th>
-                <th {...classes.thStyle}>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {topEndpoints.map((row, idx) => (
-                <tr key={idx}>
-                  <td {...classes.tdStyle}>
-                    <span {...classes.codeBadgeStyle}>{row.path}</span>
-                  </td>
-                  <td {...classes.tdStyle}>{row.count}</td>
-                  <td {...classes.tdStyle}>{row.latency}</td>
-                  <td {...classes.tdStyle}>{row.error}</td>
-                  <td {...classes.tdStyle}>
-                    <span {...classes.statusBadgeStyle}>{row.status}</span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </Box>
       </Box>
     </Box>
   );
 };
+
+function Metric({
+  label,
+  value,
+  note,
+}: {
+  label: string;
+  value: number | null;
+  note?: string;
+}) {
+  return (
+    <Box {...classes.metricStyle}>
+      <Box {...classes.metricLabelStyle}>{label}</Box>
+      <Box {...classes.metricValueStyle}>
+        {value === null ? "—" : value.toLocaleString()}
+      </Box>
+      {note && <Box {...classes.metricNoteStyle}>{note}</Box>}
+    </Box>
+  );
+}
+
+/**
+ * Daily counts. Each day is a column; a day with no events is a flat rule on
+ * the baseline rather than a short bar, so nothing reads as traffic that did
+ * not happen.
+ */
+function Chart({
+  daily,
+  peak,
+}: {
+  daily: { date: string; count: number }[];
+  peak: number;
+}) {
+  const scale = Math.max(1, peak);
+
+  return (
+    <Box {...classes.chartStyle}>
+      <Box {...classes.axisStyle}>
+        <span>{peak.toLocaleString()}</span>
+        <span>0</span>
+      </Box>
+
+      <Box {...classes.chartMainStyle}>
+        <Box {...classes.plotStyle}>
+          {daily.map((point) => (
+            <Box
+              key={point.date}
+              {...classes.columnStyle}
+              title={`${point.date}: ${point.count.toLocaleString()} events`}
+            >
+              {point.count > 0 ? (
+                <Box
+                  {...classes.barStyle}
+                  style={{
+                    height: `${Math.max(2, (point.count / scale) * 100)}%`,
+                  }}
+                />
+              ) : (
+                <Box {...classes.barEmptyStyle} />
+              )}
+            </Box>
+          ))}
+        </Box>
+
+        <Box {...classes.chartLabelsStyle}>
+          {daily.map((point) => (
+            <Box key={point.date} {...classes.chartLabelStyle}>
+              {WEEKDAYS[new Date(`${point.date}T00:00:00Z`).getUTCDay()]}
+            </Box>
+          ))}
+        </Box>
+      </Box>
+    </Box>
+  );
+}

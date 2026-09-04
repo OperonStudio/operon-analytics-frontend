@@ -1,8 +1,5 @@
-import { APP_NAME, ORG_NAME } from "#/common/constants";
-import { Header } from "#/components/header";
-import { WorkspaceSwitcher } from "#/components/workspace-switcher";
 import { cx } from "@morph-css/kit";
-import { getToken, useAuth } from "@operonstudio/auth";
+import { useAuth } from "@operonstudio/auth";
 import { BarChart3, Code, Database, Moon, Sun } from "@operonstudio/icons";
 import {
   AppShell,
@@ -13,28 +10,19 @@ import {
   useTheme,
 } from "@operonstudio/ui";
 import { Link, useLocation, useMatches } from "@tanstack/react-router";
+import {
+  ANALYTICS_URL,
+  APP_NAME,
+  CODEBLOCKS_URL,
+  COMPOSE_URL,
+  HOMEPAGE_URL,
+  ORG_NAME,
+} from "#/common/constants";
+import type { SidebarGroup, SidebarItem } from "#/common/interfaces";
+import { Header } from "#/components/header";
+import { ScopeSwitcher } from "#/components/scope-switcher";
+import { OnboardingGate } from "#/modules/onboarding";
 import * as classes from "./style";
-
-const isProdDomain =
-  typeof window !== "undefined" &&
-  window.location.hostname.endsWith("operonstudio.tech");
-
-const HOMEPAGE_URL =
-  isProdDomain || import.meta.env.PROD
-    ? "https://operonstudio.tech"
-    : (import.meta.env.VITE_HOMEPAGE_URL ?? "http://localhost:4001");
-const COMPOSE_URL =
-  isProdDomain || import.meta.env.PROD
-    ? "https://compose.operonstudio.tech"
-    : (import.meta.env.VITE_COMPOSE_URL ?? "http://localhost:4000");
-const CODEBLOCKS_URL =
-  isProdDomain || import.meta.env.PROD
-    ? "https://codeblocks.operonstudio.tech"
-    : (import.meta.env.VITE_CODEBLOCKS_URL ?? "http://localhost:4002");
-const ANALYTICS_URL =
-  isProdDomain || import.meta.env.PROD
-    ? "https://analytics.operonstudio.tech"
-    : (import.meta.env.VITE_ANALYTICS_URL ?? "http://localhost:4003");
 
 const PRODUCTS: AppShellProduct[] = [
   {
@@ -60,15 +48,11 @@ const PRODUCTS: AppShellProduct[] = [
   },
 ];
 
-function bridgeToken(baseUrl: string): string {
-  const token = getToken();
-  if (!token) return baseUrl;
-  const url = new URL(baseUrl);
-  url.searchParams.set("token", token);
-  return url.toString();
-}
-
-export const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
+export const DashboardLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const location = useLocation();
   const matches = useMatches();
   const matchWithSidebar = matches.find((m) => m.staticData?.sidebarGroups);
@@ -76,54 +60,56 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
   const { isDark, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
 
-  const navGroups: AppShellNavGroup[] = sidebarGroups.map((group: any, i: number) => ({
-    key: `${group.title ?? "group"}-${i}`,
-    title: group.title,
-    items: group.items.map((item: any, j: number) => {
-      const Icon = item.icon;
-      const isActive =
-        item.href === "/"
-          ? location.pathname === "/"
-          : location.pathname.startsWith(item.href);
-      const isExternal = item.href.startsWith("http");
-      const render: AppShellNavItem["render"] = ({
-        href,
-        className,
-        children: content,
-        "aria-current": ac,
-      }) =>
-        isExternal ? (
-          <a
-            href={href}
-            className={className}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-current={ac}
-          >
-            {content}
-          </a>
-        ) : (
-          <Link to={href} className={className} aria-current={ac}>
-            {content}
-          </Link>
-        );
-      return {
-        key: `${item.href}-${j}`,
-        label: item.label,
-        icon: Icon ? <Icon size={16} /> : null,
-        href: item.href,
-        isActive,
-        render,
-      };
+  const navGroups: AppShellNavGroup[] = sidebarGroups.map(
+    (group: SidebarGroup, i: number) => ({
+      key: `${group.title ?? "group"}-${i}`,
+      title: group.title,
+      items: group.items.map((item: SidebarItem, j: number) => {
+        const Icon = item.icon;
+        const isActive =
+          item.href === "/"
+            ? location.pathname === "/"
+            : location.pathname.startsWith(item.href);
+        const isExternal = item.href.startsWith("http");
+        const render: AppShellNavItem["render"] = ({
+          href,
+          className,
+          children: content,
+          "aria-current": ac,
+        }) =>
+          isExternal ? (
+            <a
+              href={href}
+              className={className}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-current={ac}
+            >
+              {content}
+            </a>
+          ) : (
+            <Link to={href} className={className} aria-current={ac}>
+              {content}
+            </Link>
+          );
+        return {
+          key: `${item.href}-${j}`,
+          label: item.label,
+          icon: Icon ? <Icon size={16} /> : null,
+          href: item.href,
+          isActive,
+          render,
+        };
+      }),
     }),
-  }));
+  );
 
   return (
     <AppShell
       productKey="analytics"
       products={PRODUCTS}
       navGroups={navGroups}
-      sidebarHeader={<WorkspaceSwitcher />}
+      sidebarHeader={<ScopeSwitcher />}
       topbarStart={<Header />}
       sidebarFooter={
         <>
@@ -158,17 +144,21 @@ export const DashboardLayout = ({ children }: { children: React.ReactNode }) => 
           : undefined
       }
       onSignOut={async () => {
-        await logout("/api/auth/logout");
+        await logout();
         window.location.href = HOMEPAGE_URL;
       }}
       onSwitchProduct={(product) => {
-        window.location.href = bridgeToken(product.url);
+        // Straight to the product. This used to append the session token to
+        // the URL, which writes it into browser history, the referrer header
+        // and every access log in between. The session cookie is scoped to the
+        // domain, so the other product already has it.
+        window.location.href = product.url;
         return true;
       }}
       className={cx(classes.rootStyle.className)}
       style={classes.rootStyle.style}
     >
-      {children}
+      <OnboardingGate>{children}</OnboardingGate>
     </AppShell>
   );
 };

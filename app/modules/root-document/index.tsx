@@ -1,10 +1,10 @@
-import { TopProgressBar } from "#/components/top-progress-bar";
-import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
-import { AuthGate, AuthProvider, extractTokenFromURL } from "@operonstudio/auth";
+import { AuthProvider, RequireAuth } from "@operonstudio/auth";
 import { ThemeProvider, Toaster } from "@operonstudio/ui";
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { HeadContent, Scripts, useRouterState } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { TopProgressBar } from "#/components/top-progress-bar";
+import TanStackQueryDevtools from "@/integrations/tanstack-query/devtools";
 import { DashboardLayout } from "../dashboard/dashboard-layout";
 
 const HOMEPAGE_URL =
@@ -13,11 +13,6 @@ const HOMEPAGE_URL =
   import.meta.env.PROD
     ? "https://operonstudio.tech"
     : (import.meta.env.VITE_HOMEPAGE_URL ?? "http://localhost:4001");
-
-// Extract token synchronously before TanStack Router mounts and strips it
-if (typeof window !== "undefined") {
-  extractTokenFromURL();
-}
 
 export const RootDocument = ({ children }: { children: React.ReactNode }) => {
   const location = useRouterState({ select: (s) => s.location });
@@ -31,25 +26,23 @@ export const RootDocument = ({ children }: { children: React.ReactNode }) => {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <HeadContent />
-        <style>{`
-          @media (max-width: 900px) {
-            aside {
-              display: none !important;
-            }
-          }
-        `}</style>
       </head>
       <body>
         <ThemeProvider defaultDark={false}>
-          <AuthProvider
-            refreshUrl="/api/auth/refresh"
-            enableUrlTokenBridge={true}
-          >
-            <AuthGate homepageUrl={HOMEPAGE_URL}>
+          {/* The session is an httpOnly cookie scoped to the domain, so it is
+              already present on this subdomain. The URL token bridge this
+              replaces passed a JWT through the query string, which put it in
+              browser history, server logs and any referrer header. */}
+          <AuthProvider>
+            <RequireAuth homepageUrl={HOMEPAGE_URL}>
               <TopProgressBar />
               <Toaster />
-              {isFullScreen ? children : <DashboardLayout>{children}</DashboardLayout>}
-            </AuthGate>
+              {isFullScreen ? (
+                children
+              ) : (
+                <DashboardLayout>{children}</DashboardLayout>
+              )}
+            </RequireAuth>
           </AuthProvider>
           <TanStackDevtools
             config={{
