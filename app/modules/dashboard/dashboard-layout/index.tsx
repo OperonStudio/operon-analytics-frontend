@@ -1,6 +1,13 @@
 import { cx } from "@morph-css/kit";
 import { useAuth } from "@operonstudio/auth";
-import { BarChart3, Code, Database, Moon, Sun } from "@operonstudio/icons";
+import {
+  BarChart3,
+  Code,
+  Database,
+  LayoutDashboard,
+  Moon,
+  Sun,
+} from "@operonstudio/icons";
 import {
   AppShell,
   type AppShellNavGroup,
@@ -26,25 +33,32 @@ import * as classes from "./style";
 
 const PRODUCTS: AppShellProduct[] = [
   {
+    key: "homepage",
+    label: "Studio",
+    description: "Workspaces and projects",
+    url: HOMEPAGE_URL,
+    icon: <LayoutDashboard size={18} />,
+  },
+  {
     key: "compose",
     label: "Compose",
     description: "Dynamic data & rules",
     url: COMPOSE_URL,
-    icon: <Database size={16} />,
+    icon: <Database size={18} />,
   },
   {
     key: "codeblocks",
     label: "Codeblocks",
     description: "Backend orchestration",
     url: CODEBLOCKS_URL,
-    icon: <Code size={16} />,
+    icon: <Code size={18} />,
   },
   {
     key: "analytics",
     label: "Analytics",
     description: "Visual event binding",
     url: ANALYTICS_URL,
-    icon: <BarChart3 size={16} />,
+    icon: <BarChart3 size={18} />,
   },
 ];
 
@@ -146,14 +160,6 @@ export const DashboardLayout = ({
       onSignOut={async () => {
         await logout();
         window.location.href = HOMEPAGE_URL;
-      }}
-      onSwitchProduct={(product) => {
-        // Straight to the product. This used to append the session token to
-        // the URL, which writes it into browser history, the referrer header
-        // and every access log in between. The session cookie is scoped to the
-        // domain, so the other product already has it.
-        window.location.href = product.url;
-        return true;
       }}
       className={cx(classes.rootStyle.className)}
       style={classes.rootStyle.style}
