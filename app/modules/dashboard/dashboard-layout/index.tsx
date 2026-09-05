@@ -22,7 +22,7 @@ import {
   ORG_NAME,
 } from "#/common/constants";
 import type { SidebarGroup, SidebarItem } from "#/common/interfaces";
-import { Header } from "#/components/header";
+import { Header, SubHeaderBreadcrumbs } from "#/components/header";
 import { ScopeSwitcher } from "#/components/scope-switcher";
 import { OnboardingGate } from "#/modules/onboarding";
 import * as classes from "./style";
@@ -120,6 +120,7 @@ export const DashboardLayout = ({
       navGroups={navGroups}
       sidebarHeader={<ScopeSwitcher />}
       topbarStart={<Header />}
+      subHeader={<SubHeaderBreadcrumbs />}
       sidebarFooter={
         <div>
           <div {...classes.orgLineStyle}>{ORG_NAME}</div>
