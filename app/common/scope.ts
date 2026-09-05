@@ -67,7 +67,7 @@ export function useScope() {
   );
 
   const { data: workspaces = [], isLoading: loadingWorkspaces } =
-    useQuery(workspacesQuery);
+    useQuery(workspacesQuery());
 
   const workspace =
     workspaces.find((w) => w.id === stored.workspaceId) ?? workspaces[0];

@@ -49,7 +49,7 @@ export function useOnboarding() {
     data: workspaces,
     isLoading: workspacesLoading,
     isError: workspacesErrored,
-  } = useQuery(workspacesQuery);
+  } = useQuery(workspacesQuery());
 
   const storedWorkspaceId = getActiveWorkspaceId();
   const workspaceId =
