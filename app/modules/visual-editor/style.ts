@@ -152,23 +152,16 @@ export const treeStyle = css({
   padding: "6px",
 });
 
+/** Layered on Button's ghost variant: a list row, not a chrome button. */
 export const treeItemStyle = css({
-  display: "flex",
-  alignItems: "center",
-  gap: "8px",
-  width: "100%",
-  padding: "7px 8px",
-  borderRadius: "var(--operon-radius-sm)",
-  border: "none",
-  background: "none",
-  font: "inherit",
-  color: "inherit",
-  textAlign: "left",
-  cursor: "pointer",
-  transition:
-    "background-color var(--operon-motion-fast) var(--operon-motion-easing)",
-  "&:hover": {
-    backgroundColor: "var(--operon-color-surface-sunken)",
+  "&&": {
+    justifyContent: "flex-start",
+    gap: "8px",
+    height: "auto",
+    padding: "7px 8px",
+    borderRadius: "var(--operon-radius-sm)",
+    fontWeight: 500,
+    textAlign: "left",
   },
 });
 
@@ -408,19 +401,16 @@ export const completionStyle = css({
 });
 
 export const completionItemStyle = css({
-  display: "flex",
-  alignItems: "baseline",
-  justifyContent: "space-between",
-  gap: "10px",
-  width: "100%",
-  padding: "6px 8px",
-  border: "none",
-  borderRadius: "var(--operon-radius-xs)",
-  background: "none",
-  font: "inherit",
-  color: "inherit",
-  textAlign: "left",
-  cursor: "pointer",
+  "&&": {
+    alignItems: "baseline",
+    justifyContent: "space-between",
+    gap: "10px",
+    height: "auto",
+    padding: "6px 8px",
+    borderRadius: "var(--operon-radius-xs)",
+    fontWeight: 500,
+    textAlign: "left",
+  },
 });
 
 export const completionNameStyle = css({

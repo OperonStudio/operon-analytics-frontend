@@ -1,4 +1,4 @@
-import { Box, Textarea } from "@operonstudio/ui";
+import { Box, Button, Textarea } from "@operonstudio/ui";
 import { useRef, useState } from "react";
 import type { ContextVariable } from "#/common/api/types";
 import * as classes from "../style";
@@ -142,9 +142,11 @@ export const PropertiesEditor = ({
       {matches.length > 0 && (
         <Box {...classes.completionStyle}>
           {matches.map((variable, index) => (
-            <button
+            <Button
               key={variable.id}
-              type="button"
+              variant="ghost"
+              size="sm"
+              fullWidth
               // Mouse down rather than click: blur fires first otherwise and
               // closes the list before the selection registers.
               onMouseDown={(e) => {
@@ -152,17 +154,17 @@ export const PropertiesEditor = ({
                 complete(variable.name);
               }}
               onMouseEnter={() => setHighlighted(index)}
-              {...classes.completionItemStyle}
+              className={classes.completionItemStyle.className}
               style={{
                 backgroundColor:
                   index === active
-                    ? "var(--operon-color-primary-ghost)"
+                    ? "var(--operon-color-surface-sunken)"
                     : undefined,
               }}
             >
               <span {...classes.completionNameStyle}>{variable.name}</span>
               <span {...classes.completionTypeStyle}>{variable.type}</span>
-            </button>
+            </Button>
           ))}
         </Box>
       )}

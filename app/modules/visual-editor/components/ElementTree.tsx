@@ -1,5 +1,5 @@
 import { Search } from "@operonstudio/icons";
-import { Box, Input } from "@operonstudio/ui";
+import { Box, Button, Input } from "@operonstudio/ui";
 import type { VisualEditor } from "../hooks";
 import * as classes from "../style";
 
@@ -34,16 +34,21 @@ export const ElementTree = ({ editor }: { editor: VisualEditor }) => (
         const binding = editor.bindings[element.operonId];
 
         return (
-          <button
+          <Button
             key={element.operonId}
-            type="button"
+            variant="ghost"
+            size="sm"
+            fullWidth
             onClick={() => editor.select(element.operonId)}
-            {...classes.treeItemStyle}
+            aria-pressed={isSelected}
+            className={classes.treeItemStyle.className}
             style={{
               backgroundColor: isSelected
-                ? "var(--operon-color-primary-ghost)"
+                ? "var(--operon-color-surface-sunken)"
                 : undefined,
-              color: isSelected ? "var(--operon-color-primary)" : undefined,
+              color: isSelected
+                ? "var(--operon-color-text-strong)"
+                : undefined,
             }}
           >
             <Box
@@ -68,7 +73,7 @@ export const ElementTree = ({ editor }: { editor: VisualEditor }) => (
             {binding && (
               <Box {...classes.treeEventStyle}>{binding.eventName}</Box>
             )}
-          </button>
+          </Button>
         );
       })}
 

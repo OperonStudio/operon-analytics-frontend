@@ -1,4 +1,4 @@
-import { Box, Button, Input } from "@operonstudio/ui";
+import { Box, Button, Chip, Input } from "@operonstudio/ui";
 import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { useOnboarding } from "./hooks";
@@ -173,14 +173,14 @@ function Step({
           />
           <Box {...classes.suggestionsRowStyle}>
             {suggestions.map((suggestion) => (
-              <button
+              <Chip
                 key={suggestion}
-                type="button"
+                size="sm"
+                variant="outline"
+                color="secondary"
+                label={suggestion}
                 onClick={() => setName(suggestion)}
-                {...classes.suggestionChipStyle}
-              >
-                {suggestion}
-              </button>
+              />
             ))}
           </Box>
         </Box>

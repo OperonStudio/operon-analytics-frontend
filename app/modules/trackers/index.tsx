@@ -1,4 +1,4 @@
-import { Search, Trash2, Zap } from "@operonstudio/icons";
+import { Plug, Search, Trash2 } from "@operonstudio/icons";
 import { Box, Button, Input, Toggle, toast } from "@operonstudio/ui";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
@@ -70,7 +70,7 @@ export const TrackersModule = () => {
       <Box {...classes.pageStyle}>
         <Box {...classes.emptyCardStyle}>
           <Box {...classes.emptyIconStyle}>
-            <Zap size={20} />
+            <Plug size={20} />
           </Box>
           <Box {...classes.emptyTitleStyle}>No trackers yet</Box>
           <Box {...classes.emptyBodyStyle}>
@@ -98,8 +98,12 @@ export const TrackersModule = () => {
           fullWidth
         />
         <Link to="/visual-editor" style={{ textDecoration: "none" }}>
-          <Button variant="outline" size="sm" style={{ gap: 6 }}>
-            <Zap size={14} /> Bind another
+          <Button
+            variant="outline"
+            size="sm"
+            startIcon={<Plug size={14} />}
+          >
+            Bind another
           </Button>
         </Link>
       </Box>

@@ -1,4 +1,4 @@
-import { ArrowLeft, Boxes, RefreshCw, Zap } from "@operonstudio/icons";
+import { ArrowLeft, Boxes, Eye, RefreshCw } from "@operonstudio/icons";
 import { Box, Button, Input } from "@operonstudio/ui";
 import { Link } from "@tanstack/react-router";
 import type { VisualEditor } from "../hooks";
@@ -48,8 +48,8 @@ export const EditorToolbar = ({ editor }: { editor: VisualEditor }) => (
         aria-pressed={editor.isInspecting}
         disabled={editor.connection !== "connected"}
         style={{ gap: 6 }}
+        startIcon={<Eye size={15} />}
       >
-        <Zap size={15} />
         {editor.isInspecting ? "Inspecting" : "Inspect"}
         <kbd {...classes.kbdStyle}>⌘I</kbd>
       </Button>

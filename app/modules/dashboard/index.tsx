@@ -1,4 +1,4 @@
-import { Zap } from "@operonstudio/icons";
+import { Plug } from "@operonstudio/icons";
 import { Box, Button } from "@operonstudio/ui";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
@@ -89,8 +89,8 @@ export const DashboardModule = () => {
                   within a few seconds of firing.
                 </Box>
                 <Link to="/visual-editor" style={{ textDecoration: "none" }}>
-                  <Button size="sm" style={{ gap: 6 }}>
-                    <Zap size={14} /> Open the visual editor
+                  <Button size="sm" startIcon={<Plug size={14} />}>
+                    Open the visual editor
                   </Button>
                 </Link>
               </Box>

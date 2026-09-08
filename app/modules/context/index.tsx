@@ -145,7 +145,7 @@ export const ContextModule = () => {
                   size="sm"
                   aria-label={`Remove ${variable.name}`}
                   onClick={() => remove.mutate(variable.id)}
-                  style={{ color: "var(--operon-color-danger)" }}
+                  iconOnly
                 >
                   <Trash2 size={15} />
                 </Button>
